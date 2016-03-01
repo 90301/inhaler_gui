@@ -32,7 +32,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   tf2
   nav_msgs
-  inhaler_gui
+#  inhaler_gui
 )
 
 
@@ -87,19 +87,7 @@ add_message_files(
    draw_line.msg
 )
 
-## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
-
-## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
-#   Action1.action
-#   Action2.action
-# )
+#generate_messages
 
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
