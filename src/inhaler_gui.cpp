@@ -7,15 +7,8 @@
 #include "ros/ros.h"
 //#include "inhaler_gui/draw_line.h"
 #include "inhaler_gui/draw_line.h"
-/*
-int main(int argc, char *argv[])
-{
-    QApplication app(argc, argv);
-    QWidget w;
-    w.show();
-    app.exec();
-}
-*/
+
+std::vector<Line> lines;
 /**
  * Base class for all other shapes
  */
@@ -51,7 +44,7 @@ protected:
     void paintEvent(QPaintEvent *);
     
 };
-std::vector<Line> lines;
+
 
 MyWidget::MyWidget()
 {
