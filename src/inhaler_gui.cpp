@@ -76,11 +76,11 @@ void MyWidget::paintEvent(QPaintEvent *)
 /*
  * CALL BACK FUNCTIONS
  * 
- * CCCCCCC     AAAAA    L         L         BBBBBB     AAAAA    CCCCCC  K   Kk
- * C          A     A   L         L         B     B   A     A   C       K Kk
+ * CCCCCCC     AAAAA    L         L         BBBBBB     AAAAA    CCCCCC  K    k
+ * C          A     A   L         L         B     B   A     A   C       K  k
  * C          AAAAAAA   L         L         BBBBBBB   AAAAAAA   C       KK
- * C          A     A   L         L         B     B   A     A   C       K Kk
- * CCCCCCC    A     A   LLLLLLL   LLLLLLL   BBBBBB    A     A   CCCCCC  K   Kk
+ * C          A     A   L         L         B     B   A     A   C       K  k
+ * CCCCCCC    A     A   LLLLLLL   LLLLLLL   BBBBBB    A     A   CCCCCC  K    k
  */
 //void addLine(const inhaler_gui::draw_line msg) {
  
@@ -107,10 +107,7 @@ int main(int argc, char *argv[])
     //ROS subscribing
     ros::NodeHandle n;
     
-    
     ros::Subscriber lineSub = n.subscribe ("inhalerGUI_Line",1000,addLine); 
-    
-    
     
     widget.show();
     return app.exec();
