@@ -5,7 +5,8 @@
 #include <iostream>
 
 #include "ros/ros.h"
-//#include "inhaler_gui/draw_line.h"
+
+#include "inhaler_gui/draw_text.h"
 #include "inhaler_gui/draw_line.h"
 
 
@@ -31,7 +32,24 @@ public:
  //over ridden method
  void draw(QPainter& p) {
   p.drawLine (this->x1,this->y1,this->x2,this->y2);
-  std::cout << "This ran as a line." << std::endl;
+ }
+};
+class Text : public I_Shape {
+public:
+ double x,y;
+ int textSize;
+ std::string text;
+ Text(double& x,double& y,int& textSize, std::string& text) {
+   this->x = x;
+   this->y = y;
+   this->textSize = textSize;
+   this->text = text;
+ }
+ //over ridden method
+ void draw(QPainter& p) {
+   QString qs;
+   qs.fromStdString(text);
+  p.drawText((int)x,(int)y,qs);
  }
 };
 
@@ -46,6 +64,7 @@ protected:
 };
 
 std::vector<Line> lines;
+std::vector<Text> texts;
 
 
 MyWidget::MyWidget()
@@ -68,8 +87,9 @@ void MyWidget::paintEvent(QPaintEvent *)
     
     for (int i=0;i<lines.size ();i++) {
       lines[i].draw(painter);
-      
-      
+     }
+    for (int i=0;i<texts.size ();i++) {
+      texts[i].draw(painter);
      }
     
     
@@ -96,8 +116,17 @@ void addLine(const inhaler_gui::draw_lineConstPtr& msg) {
   lines.push_back (l);
   std::cout << "added line: " << x1 << " , " << y1 << " -> " << x2 << " , " << y2 << std::endl;
 }
+void addText(const inhaler_gui::draw_textConstPtr& msg) {
+  double x = msg->x;
+  double y = msg->y;
+  int textSize = msg->textSize;
+  std::string text = msg->text;
+  Text t(x,y,textSize,text);
+  texts.push_back (t);
+  std::cout << "added text!" << std::endl;
+}
 
-const static double VERSION_NUMBER = 1.2;
+const static double VERSION_NUMBER = 1.3;
 int main(int argc, char *argv[])
 {
   
