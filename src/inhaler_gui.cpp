@@ -140,7 +140,8 @@ int main(int argc, char *argv[])
     //ROS subscribing
     ros::NodeHandle n;
     
-    ros::Subscriber lineSub = n.subscribe ("inhalerGUI_Line",1000,addLine); 
+    ros::Subscriber lineSub = n.subscribe ("inhalerGUI_Line",1000,addLine);
+    ros::Subscriber textSub = n.subscribe ("inhalerGUI_Text",1000,addText);
     
     
     
