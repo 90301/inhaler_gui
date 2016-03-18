@@ -46,10 +46,18 @@ public:
    this->text = text;
  }
  //over ridden method
+ //draws the text to the screen.
  void draw(QPainter& p) {
-   QString qs;
-   qs.fromStdString(text);
+   //QColor qcolor(122,122,122);
+   //p.setPen(Qt::black);
+   QFont font = p.font();   
+   font.setPointSize(textSize);
+  p.setFont(font);
+   QString qs = QString::fromStdString(text);  
+   
   p.drawText((int)x,(int)y,qs);
+  
+  //std::cout << "drawing text: " << text << " | " << qs.toStdString() << std::endl;
  }
 };
 
@@ -126,7 +134,7 @@ void addText(const inhaler_gui::draw_textConstPtr& msg) {
   std::cout << "added text!" << std::endl;
 }
 
-const static double VERSION_NUMBER = 1.3;
+const static double VERSION_NUMBER = 1.4;
 int main(int argc, char *argv[])
 {
   
