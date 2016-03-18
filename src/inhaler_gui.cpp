@@ -8,7 +8,7 @@
 //#include "inhaler_gui/draw_line.h"
 #include "inhaler_gui/draw_line.h"
 
-std::vector<Line> lines;
+
 /**
  * Base class for all other shapes
  */
@@ -44,6 +44,8 @@ protected:
     void paintEvent(QPaintEvent *);
     
 };
+
+std::vector<Line> lines;
 
 
 MyWidget::MyWidget()
@@ -92,12 +94,14 @@ void addLine(const inhaler_gui::draw_lineConstPtr& msg) {
   double y2 = msg->y2;
   Line l(x1,y1,x2,y2);
   lines.push_back (l);
-  //std::cout << "added line: " << x1 << " , " << y1 << " -> " << x2 << " , " << y2 << std::endl;
+  std::cout << "added line: " << x1 << " , " << y1 << " -> " << x2 << " , " << y2 << std::endl;
 }
 
-
+const static double VERSION_NUMBER = 1.2;
 int main(int argc, char *argv[])
 {
+  
+  std::cout << "Inhaler GUI Version: " << VERSION_NUMBER << " started." << std::endl;
  ros::init (argc, argv, "inhaler_gui_server");
     QApplication app(argc, argv);
     MyWidget widget;
@@ -109,6 +113,15 @@ int main(int argc, char *argv[])
     
     ros::Subscriber lineSub = n.subscribe ("inhalerGUI_Line",1000,addLine); 
     
+    
+    
     widget.show();
-    return app.exec();
+    
+    ros::AsyncSpinner spinner(4); // Use 4 threads
+    spinner.start();
+    //ros::waitForShutdown();
+    app.exec();
+    //app.exec();
+    
+    return 0;
 }
