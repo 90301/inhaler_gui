@@ -32,7 +32,6 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   tf2
   nav_msgs
-#  inhaler_gui
 )
 
 
@@ -85,6 +84,7 @@ target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} Qt5::Widgets)
 add_message_files(
    FILES
    draw_line.msg
+   draw_text.msg
 )
 
 #generate_messages
