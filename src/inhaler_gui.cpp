@@ -9,7 +9,6 @@
 #include "inhaler_gui/draw_text.h"
 #include "inhaler_gui/draw_line.h"
 
-
 /**
  * Base class for all other shapes
  */
@@ -59,6 +58,114 @@ public:
   
   //std::cout << "drawing text: " << text << " | " << qs.toStdString() << std::endl;
  }
+};
+
+/*
+ * PERSISTENT GUI
+ * persistent gui
+ * all elements that say use a string "ID" to identify them.
+ */
+
+class PLine : public I_Shape {
+public:
+ double x1,y1,x2,y2;
+ std::string id;
+ PLine(double x1,double y1,double x2,double y2,std::string& id) {
+  this->x1 = x1;
+  this->x2 = x2;
+  this->y1 = y1;
+  this->y2 = y2;
+  this->id = id;
+ }
+ PLine() {
+   //This should hopefully never run.
+   std::cout << "Persistent line (PLine) created with blank constructor." << std::endl;
+ }
+ 
+ //update method
+ void updateP(PLine& pline) {
+   this->x1 = pline.x1;
+   this->x2 = pline.x2;
+   this->y1 = pline.y1;
+   this->y2 = pline.y2;
+ }
+ //over ridden method
+ void draw(QPainter& p) {
+  p.drawLine (this->x1,this->y1,this->x2,this->y2);
+ }
+};
+
+class PText : public I_Shape {
+public:
+ double x,y;
+ int textSize;
+ std::string text;
+ std::string id;
+ PText(double& x,double& y,int& textSize, std::string& text, std::string& id) {
+   this->x = x;
+   this->y = y;
+   this->textSize = textSize;
+   this->text = text;
+   this->id = id;
+ }
+ PText() {
+      //This should hopefully never run.
+   std::cout << "Persistent text (Ptext) created with blank constructor." << std::endl;
+ }
+ //update methods
+ void updateP(std::string& text) {
+   this->text = text;
+ }
+ void updateP(double& x,double& y,int& textSize, std::string& text) {
+   this->x = x;
+   this->y = y;
+   this->textSize = textSize;
+   this->text = text;
+ }
+ void updateP(PText& ptext) {
+   this->x = ptext.x;
+   this->y = ptext.y;
+   this->textSize = ptext.textSize;
+   this->text = ptext.text;
+ }
+ //over ridden method
+ //draws the text to the screen.
+ void draw(QPainter& p) {
+   //QColor qcolor(122,122,122);
+   //p.setPen(Qt::black);
+   QFont font = p.font();   
+   font.setPointSize(textSize);
+  p.setFont(font);
+   QString qs = QString::fromStdString(text);  
+   
+  p.drawText((int)x,(int)y,qs);
+  
+  //std::cout << "drawing text: " << text << " | " << qs.toStdString() << std::endl;
+ }
+};
+
+/*
+ * Holds all persistent data structures
+ */
+class PWorkspace {
+public:
+  std::map<std::string,PLine> pLines;
+  std::map<std::string,PText> pTexts;
+  void clear() {
+    pLines.clear();
+    pTexts.clear();
+  }
+  void addPLine(PLine& pLine) {
+    std::map<std::string,PLine>::iterator it = pLines.find(pLine.id);
+    
+    if (it != pLines.end()) {
+      //update
+      pLines[pLine.id] = pLine;
+    } else {
+      //create a new line for that id
+    pLines[pLine.id] = pLine;
+    }
+  }
 };
 
 class MyWidget : public QWidget
@@ -133,8 +240,22 @@ void addText(const inhaler_gui::draw_textConstPtr& msg) {
   texts.push_back (t);
   std::cout << "added text!" << std::endl;
 }
+void clearGUI(const inhaler_gui::draw_textConstPtr& msg) {
+  lines.clear();
+  texts.clear();
+  
+  /*
+  double x = msg->x;
+  double y = msg->y;
+  int textSize = msg->textSize;
+  std::string text = msg->text;
+  Text t(x,y,textSize,text);
+  texts.push_back (t);
+   */
+  std::cout << "added text!" << std::endl;
+}
 
-const static double VERSION_NUMBER = 1.4;
+const static double VERSION_NUMBER = 1.45;
 int main(int argc, char *argv[])
 {
   
@@ -150,7 +271,7 @@ int main(int argc, char *argv[])
     
     ros::Subscriber lineSub = n.subscribe ("inhalerGUI_Line",1000,addLine);
     ros::Subscriber textSub = n.subscribe ("inhalerGUI_Text",1000,addText);
-    
+    ros::Subscriber clearSub = n.subscribe ("inhalerGUI_Clear",1000,clearGUI);
     
     
     widget.show();
