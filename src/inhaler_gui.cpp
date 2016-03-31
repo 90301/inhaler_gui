@@ -131,8 +131,6 @@ public:
  //over ridden method
  //draws the text to the screen.
  void draw(QPainter& p) {
-   //QColor qcolor(122,122,122);
-   //p.setPen(Qt::black);
    QFont font = p.font();   
    font.setPointSize(textSize);
   p.setFont(font);
@@ -164,6 +162,17 @@ public:
     } else {
       //create a new line for that id
     pLines[pLine.id] = pLine;
+    }
+  }
+  
+  void drawEverything(QPainter& p) {
+    std::map<std::string,PLine>::iterator pLineIt;
+    std::map<std::string,PText>::iterator pTextIt;
+    for (pLineIt = pLines.begin(); pLineIt!=pLines.end();pLineIt++) {
+      (*pLineIt).second.draw(p);
+    }
+     for (pTextIt = pTexts.begin(); pTextIt!=pTexts.end();pTextIt++) {
+      (*pTextIt).second.draw(p);
     }
   }
 };
