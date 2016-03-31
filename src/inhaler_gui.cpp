@@ -149,6 +149,9 @@ class PWorkspace {
 public:
   std::map<std::string,PLine> pLines;
   std::map<std::string,PText> pTexts;
+  PWorkspace() {
+    //default constructor
+  }
   void clear() {
     pLines.clear();
     pTexts.clear();
@@ -189,7 +192,7 @@ protected:
 
 std::vector<Line> lines;
 std::vector<Text> texts;
-
+PWorkspace mainWorkspace;
 
 MyWidget::MyWidget()
 {
@@ -215,6 +218,8 @@ void MyWidget::paintEvent(QPaintEvent *)
     for (int i=0;i<texts.size ();i++) {
       texts[i].draw(painter);
      }
+    
+    mainWorkspace.drawEverything(painter);
     
     
 }
@@ -268,6 +273,7 @@ const static double VERSION_NUMBER = 1.45;
 int main(int argc, char *argv[])
 {
   
+  mainWorkspace.clear(); 
   std::cout << "Inhaler GUI Version: " << VERSION_NUMBER << " started." << std::endl;
  ros::init (argc, argv, "inhaler_gui_server");
     QApplication app(argc, argv);
